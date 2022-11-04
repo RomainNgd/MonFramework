@@ -8,7 +8,9 @@
     ],
     "autoload" : {
         "psr-4" : {
-            "Framework\\": "src/Framework"
+            "Framework\\": "src/Framework",
+            "App\\": "src",
+            "Tests\\": "tests"
         }
     },
     "require-dev": {
@@ -17,6 +19,8 @@
     },
     "require": {
         "guzzlehttp/psr7": "^2.4",
-        "http-interop/response-sender": "^1.0"
+        "http-interop/response-sender": "^1.0",
+        "zendframework/zend-expressive-fastroute": "1.2.0",
+        "symfony/var-dumper": "^5.4"
     }
 }
