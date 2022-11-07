@@ -1,6 +1,9 @@
-<?= $renderer->render('header', ['title' => $slug]) ?>
+{% extends 'layout.twig' %}
 
-<h1>Bienvenue sur l'article <?= $slug ?> </h1>
+{% block title slug %}
+
+{% block body %}
+<h1>Bienvenue sur l'article {{ slug }} </h1>
 
 <p>
     Contenant du sens est source de distractions, et empêche de se concentrer sur la
@@ -13,5 +16,4 @@
     construction. Plusieurs versio
 </p>
 
-
-<?= $renderer->render('footer') ?>
+{% endblock %}

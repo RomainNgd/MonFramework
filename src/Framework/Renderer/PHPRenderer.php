@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework;
+namespace Framework\Renderer;
 
-class Renderer
+class PHPRenderer implements RendererInterface
 {
     const DEFAULT_NAMESPACE = '__MAIN';
 
@@ -10,7 +10,21 @@ class Renderer
 
     private array $globals = [];
 
-    public function addPath(string $namespace, ?string $path = null)
+
+    public function __construct(?string $defaultPath = null)
+    {
+        if (!is_null($defaultPath)) {
+            $this->addPath($defaultPath);
+        }
+    }
+
+    /**
+     * Ajouter un chemin pour charger les vues
+     * @param string $namespace
+     * @param string|null $path
+     * @return void
+     */
+    public function addPath(string $namespace, ?string $path = null) : void
     {
         if (is_null($path)) {
             $this->paths[self::DEFAULT_NAMESPACE] = $namespace;
