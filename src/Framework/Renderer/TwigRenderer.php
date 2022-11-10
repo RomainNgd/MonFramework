@@ -10,8 +10,8 @@ use Twig_Environment;
 
 class TwigRenderer implements RendererInterface
 {
-    private $twig;
-    private $loader;
+    private Environment $twig;
+    private FilesystemLoader $loader;
 
     public function __construct(FilesystemLoader $loader, Environment $twig)
     {

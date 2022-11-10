@@ -42,7 +42,6 @@ class App
      */
     public function run(ServerRequestInterface $request): ResponseInterface
     {
-        dump($request);
         $uri = $request->getUri()->getPath();
         if (!empty($uri) && $uri[-1] === '/') {
             return (new Response())
@@ -59,12 +58,10 @@ class App
         $request = array_reduce(array_keys($params), function ($request, $key) use ($params) {
             return $request->withAttribute($key, $params[$key]);
         }, $request);
-        dump($request);
         $callback = $route->getCallback();
         if (is_string($callback)) {
             $callback = $this->container->get($callback);
         }
-        dump([$request]);
         $response = call_user_func_array($callback, [$request]);
         if (is_string($response)) {
             return new Response(200, [], $response);

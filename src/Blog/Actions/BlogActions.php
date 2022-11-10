@@ -2,37 +2,53 @@
 
 namespace App\Blog\Actions;
 
+use App\Blog\Table\PostTable;
+use Framework\Actions\RouteurAwareAction;
 use Framework\Renderer\RendererInterface;
-use GuzzleHttp\Psr7\Request;
+use Framework\Router;
 use Psr\Http\Message\ServerRequestInterface;
 
 class BlogActions
 {
     private RendererInterface $renderer;
+    private PostTable $posteTable;
+    private Router $router;
+    use RouteurAwareAction;
 
-    public function __construct(RendererInterface $renderer)
+    public function __construct(RendererInterface $renderer, Router $router, PostTable $postTable)
     {
         $this->renderer = $renderer;
+        $this->posteTable = $postTable;
+        $this->router = $router;
     }
-    public function __invoke(ServerRequestInterface $request): string
+    public function __invoke(ServerRequestInterface $request)
     {
-        $slug = $request->getAttribute('slug');
-        if ($slug) {
-            return $this->show($slug);
+        if ($request->getAttribute('id')) {
+            return $this->show($request);
         } else {
-            return $this->index();
+            return $this->index($request);
         }
     }
 
-    public function index(): string
+    public function index(ServerRequestInterface $request): string
     {
-        return $this->renderer->render('@blog/index');
+        $params = $request->getQueryParams();
+        $posts = $this->posteTable->findPaginated(12, $params['p'] ?? 1);
+        return $this->renderer->render('@blog/index', compact('posts'));
     }
 
-    public function show(string $slug):string
+    public function show(ServerRequestInterface $request)
     {
+        $slug = $request->getAttribute('slug');
+        $post = $this->posteTable->find($request->getAttribute('id'));
+        if ($post->slug !== $slug) {
+            return $this->redirect('blog.show', [
+                'slug' => $post->slug,
+                'id' => $post->id
+            ]);
+        }
         return $this->renderer->render('@blog/show', [
-            'slug' => $slug
+            'post' => $post
         ]);
     }
 }
