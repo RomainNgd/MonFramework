@@ -4,7 +4,7 @@ namespace App\Blog\Entity;
 
 use Exception;
 
-class Post
+class  Post
 {
 
     public $id;
